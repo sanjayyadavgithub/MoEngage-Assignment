@@ -1,58 +1,83 @@
 import React,{useState,useEffect} from 'react'
 import axios from 'axios';
-
 import '../../App.css'
 const Home  = ()=>{
-    //https://api.aniapi.com/v1/anime     https://api..com/v1/user_story
-  const [data, setData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [array, setArray] = useState([]);
  
+  const [dat, setData] = useState([])
+  const [searchTerm, setSearchTerm] = useState();
+  const [array, setArray] = useState([]);
+  
+  useEffect(() => {
+    axios
+      .get('https://api.aniapi.com/v1/anime/')
+      .then((res) => setData(res.data.data.documents))
+      .catch((err) => {
+        console.log('err', err);
+      });
+  },[])
+  
 
   useEffect(() => {
-    axios.get("https://jsonplaceholder.typicode.com/photos")
-    .then(res=>setData(res.data))
-    .catch(err=>console.log(err))
+    const arr = dat.filter((val) => {
+        if (setSearchTerm === '') {
+          return val;
+        } else if (val.descriptions.en == searchTerm) {
+          return val;
+        }
+      });
+
+      setArray(arr);
   })
 
-  let arr = data.filter(value => {
-    if (value.title.toLowerCase() == searchTerm.toLowerCase()) {
-      return value;
-    } else if (searchTerm == "") {
-      return value;
-    }
-    setArray(arr);
+  console.log('data api', array);
 
-    return (
+  return (
+    <div>
       <div className='home'>
-        <input type="text" placeholder="Enter SearchTerm" onChange={(e) => setSearchTerm(e.target.value)} />
-        <div>
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>URl</th>
-                <th>ThumbnailUrl</th>
-
-              </tr>
-            </thead>
-            <tbody>
-              {array.map(value => {
-                return (<tr>
-                  <td>{value.id}</td>
-                  <td>{value.title}</td>
-                  <td>{value.url}</td>
-                  <td>{value.thumbnailUrl}</td>
-                </tr>
-                )
-              })
-              }
-            </tbody>
-          </table>
-        </div>
-
+        <input
+          type='text'
+          placeholder='Enter Title  or Genres'
+          value={searchTerm}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+          }}
+        />
       </div>
-    );
+      <div style={{ margin: '0 10px', border: '1px solid black', textAlign: 'center' }}>
+        <table>
+          <thead>
+            <tr>
+              <th>Anime Name</th>
+              <th>Trailer Url</th>
+              <th>Genres</th>
+              <th>Descriptions</th>
+              <th>Season Year</th>
+              <th>Episodes Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dat.map((value) => {
+              return (
+                <tr key={value.anilist_id}>
+                  <td>{value.titles.en}</td>
+                  <td>{value.trailer_url}</td>
+                  <td>
+                    {value.genres.map((val) => {
+                      return <span>{val} </span>;
+                    })}
+                  </td>
+                  <td>{value.descriptions.en}</td>
+                  <td>{value.season_year}</td>
+                  <td>{value.episodes_count}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
   }
 export default Home
+
+

@@ -59,10 +59,26 @@ a{
   cursor: pointer;
 }
 
-/*home    vesexid197@ncdainfo.com     eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQzOCIsIm5iZiI6MTYzMzYwODg1NCwiZXhwIjoxNjM2MjAwODU0LCJpYXQiOjE2MzM2MDg4NTR9.LEvrrtzllNYFJqcA3bIGpipsApjce2xrXYG-SNnHcVk*/
 .home{
   align-items: center;
   width: 385px;
   margin: 0 auto;
 }
 
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  border: 1px solid #c02626;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
